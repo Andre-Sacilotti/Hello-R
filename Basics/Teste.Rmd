@@ -1,0 +1,389 @@
+---
+title: "Hello R"
+author: "Andre Sacilotti"
+date: "21/05/2020"
+output: html_document
+---
+
+```{r install, include=FALSE}
+library(knitr)
+library(rmarkdown)
+library(dplyr)
+library(tidyverse)
+
+setwd('C:/Users/Andre/R/Hello Word')
+```
+
+# Basic Algebra
+
+Learning some basic operations
+
+```{r}
+2+3
+18/25
+14/6+3
+14/(6+3)
+25+36/2
+(25+36)/2
+2^2
+4^(1/2)
+27^(1/3)
+```
+
+# Number Notation
+
+In R are used the notation $ey$, that is the same as $10^y$, for numbers with more than 5 digits, as following
+
+```{r}
+10000
+100000
+0.001
+0.0001
+```
+
+# Variables
+
+Like in programming languages like python, or lua, we don't need to declare the type of the variable
+
+```{r}
+
+X = 10
+Y = 20
+
+Z = X*Y
+
+Z
+
+name = "Andre"
+aux = "Hello"
+
+paste(aux, name, sep = " ")
+```
+
+# Vectors
+
+R has some basic vectors created with c(), like following
+
+```{r}
+vec = c(1,2,3,4,5,6,7,8)
+vec
+```
+
+```{r}
+vec2 = c(.0005, .540, .324, .1, .0001556)
+vec2
+```
+
+```{r}
+vec3 = c(vec, vec2)
+print(vec3)
+```
+
+But we can create Sequences, using X:Y, quere X is the initial value and Y the last value from the sequence, look:
+
+```{r}
+3:27
+
+```
+
+Or yet using the seq() command
+
+```{r}
+seq(from = 2, to = 50, by = 3)
+
+```
+
+
+Or even with rep() command
+
+```{r}
+rep(x = c(1,2,3), times = 2)
+```
+
+```{r}
+rep(x = c(1,2,3), each = 2)
+```
+
+```{r}
+rep(x=c(1,2,3), times=2, each=2)
+```
+
+We can sort the vector
+
+```{r}
+sort(rep(x=c(1,2,3), times=2, each=2), decreasing = FALSE)
+```
+```{r}
+sort(rep(x=c(1,2,3), times=2, each=2), decreasing = TRUE)
+```
+
+Measure the lenght of the vector
+
+```{r}
+length(sort(rep(x=c(1,2,3), times=2, each=2), decreasing = FALSE))
+```
+
+R had something different from others programming language, here the vector index starts from 1 (WHY???? WHY???????)
+
+```{r}
+vec[1]
+```
+
+And we can pass an vector with index that we want, repeting the index or even and out of index number, that will return NA
+
+```{r}
+vec[c(1,1,9,4)]
+```
+
+And someone that programs in python always uses things like list[-1], but, in R its delete the first element, look:
+
+```{r}
+vec
+```
+```{r}
+vec[-1]
+```
+```{r}
+vec
+```
+
+# Matrix
+
+Giving the number of rows and columns, we can build an matrix
+
+```{r}
+matrix(data = c(1,2,3,4), ncol = 2, nrow = 2)
+```
+
+If we have 2 vectors or more, R has a function to build an matrix using the vectors as columns or rows, look:
+
+```{r}
+rbind(1:3,4:6)
+```
+
+```{r}
+cbind(1:3,4:6)
+```
+
+The dim, nrow, ncol commands can return the required dimension of the matrix look
+```{r}
+aux = rbind(1:3,4:6)
+print(dim(aux))
+print(nrow(aux))
+print(ncol(aux))
+```
+
+Like vectors, using [] we can return some elements of the matrix
+
+```{r}
+aux[2,]
+```
+
+```{r}
+aux[,2]
+```
+
+```{r}
+aux[2]
+```
+
+Transpose Matrix
+
+```{r}
+t(aux)
+```
+
+Identity Matrix
+
+```{r}
+A = diag(x=3)
+A
+```
+
+Dot product
+
+```{r}
+2*aux
+```
+
+Matrix multiplication
+
+```{r}
+A = matrix(data = c(1,2,3,4), ncol=2, nrow=2)
+B = matrix(data = c(4,5,6,7), ncol=2, nrow=2)
+
+print(A)
+print(B)
+```
+
+```{r}
+A%*%B
+```
+
+```{r}
+B%*%A
+```
+
+Inverse Matrix
+
+```{r}
+solve(A)
+```
+
+```{r}
+solve(A)%*%A
+```
+
+Multidimensional Matrix, using the array command the dim argument are (nrow, ncol, dimension1, ...., dimensionN)
+
+```{r}
+BR = array(data=rep(1:24,times=3),dim=c(3,4,2))
+BR
+```
+
+```{r}
+BR = array(data=rep(1:24,times=3),dim=c(3,4,2,2,2))
+BR
+```
+
+Which command help search with a condition inside matrix, vector, array...
+
+```{r}
+x = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20)
+which(x = x>5)
+```
+We can find using which as index
+
+```{r}
+vec = c(1,2,3,4,5,6,7,8)
+print(vec)
+vec[which(x=vec<3)]
+```
+
+And we can delete, using -which
+```{r}
+vec = c(1,2,3,4,5,6,7,8)
+print(vec)
+vec[-which(x=vec<5)]
+```
+
+
+
+# Conditional Operator
+
+```{r}
+(TRUE&&FALSE)||(TRUE&&FALSE)
+```
+
+```{r}
+(6< 10) && (6< 8)
+```
+
+# DataFrame
+
+Yay! This is really nice way to present and use data, similar to python-pandas dataframe
+
+```{r}
+df = data.frame(Name = c("Carl", "Roberto", "Andre"), Age = c(25, 32, 18), Country = c("USA", "CAN", "BR"),
+                Sex = c("F", "M", 'M'), Sport = c("Golf", "Swiming", "Run"))
+df
+```
+
+```{r}
+df[1]
+```
+
+Using df[X , c()] we can get the coluns c() of the row X, or if we use df[,c()] we will get all the rows with only c() columns 
+
+```{r}
+df[1,c(1,4)]
+```
+
+Using df[X, Y], X means the row and Y the columns
+
+```{r}
+df[2,1]
+```
+
+With the name of the columns, using X$Y, it returns the all values from the column Y
+
+```{r}
+df$Age
+```
+
+Of course, we can add dataframes
+
+```{r}
+new = data.frame(Name="Brian",Age=7,Sex="M", Country="USA", Sport="NA" )
+new
+```
+
+```{r}
+df = rbind(df,new)
+df
+```
+
+And finally, filter elements in dataframe giving some condition
+
+```{r}
+df[df$Age >= 18,]
+```
+
+
+```{r}
+df[df$Country =="USA",]
+```
+
+# Loops
+
+R loops are simple like in python but uses brackets like C++
+
+```{r}
+for(i in 1:10){
+  print(i)
+}
+```
+
+```{r}
+i=0
+while (i < 5){
+print(i)
+i <- i + 1
+}
+```
+
+
+# If condition
+
+```{r}
+x = 25
+if(x < 10){
+  print('less')
+} else{
+  print('greater')
+}
+```
+
+# Functions
+
+```{r}
+Sum <- function(x,y){
+  return(x+y)
+}
+
+Sum(1,3)
+```
+
+# Loading CSV or Datasets
+
+Built-in dataset
+
+```{r}
+library(datasets)
+data(iris)
+summary(iris)
+
+```
+
+
+

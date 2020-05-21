@@ -1,0 +1,97 @@
+---
+title: "Hello R"
+author: "Andre Sacilotti"
+date: "21/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Iris Data Analysis
+
+This is my first project in R, i started my studies recently, so i will apply everything i have learned so far
+
+### Setup
+
+```{r}
+#install.packages('e1071')
+#install.packages("caret")
+library(datasets)
+library(e1071)
+library(caret)
+```
+
+### Reading the Dataset
+
+Look to the dataframe of an subset of the iris data
+
+```{r}
+df = iris
+head(df)
+```
+
+## Exploratory Data Analysis
+
+Look bellow, using dim(), it returned that the dataframe has 150 elements and 5 columns. And using the summary() we can get some important statistics information, like min/max, mean, median, quartiles
+
+```{r}
+dim(df)
+summary(df)
+```
+
+And we can plot a scatter of every columns combination, simply with pairs() or plot()
+
+```{r}
+plot(iris[,1:4],col=iris[,5],oma=c(1,4,6,12))
+par(xpd=TRUE)
+legend(0.85,0.6, as.vector(unique(iris$Species)),fill=c(1,2,3))
+```
+
+We can easily see some 
+
+
+## Data Preprocessing
+
+```{r}
+df$Sepal.Length = scale( df$Sepal.Length )
+df$Sepal.Width = scale( df$Sepal.Width )
+df$Petal.Length = scale( df$Petal.Length )
+df$Petal.Width = scale( df$Petal.Width )
+summary(df)
+```
+
+We can split the data into test and train, using sample(list, n) to get n index number inside list. And then using the setdiff to get inside the list, numbers diferente from the train
+
+```{r}
+set.seed(420)
+train = sample(1:150, 0.5*150) 
+test <- setdiff(1:150,train)
+
+df_train = iris[train,]
+
+df_test <- iris[test,]
+```
+
+## Support Vector Machine
+
+Using the library e1071, we can create an svm model
+
+```{r}
+svc = svm(Species ~ ., data = df_train)
+summary(svc)
+pred = predict(svc, df_test)
+confusionMatrix(pred, df_test$Species)[3]$overall[1]
+```
+
+The predict function uses an model object, and then we can get the accuracy and an table to see how our model goes with the confusionMatrix
+
+```{r}
+pred = predict(svc, df_test)
+confusionMatrix(pred, df_test$Species)[3]$overall[1]
+```
+
+
+L
+
